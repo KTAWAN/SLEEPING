@@ -1,0 +1,59 @@
+@component('layouts.master')
+
+@slot('search')
+  <form class="d-flex" method="GET" action="/search">
+    <input
+      class="form-control me-2"
+      type="search"
+      name="q"
+      placeholder="Search headphones..."
+      value="{{ query }}"
+      required
+    />
+    <button class="btn btn-outline-light" type="submit">Search</button>
+  </form>
+@end
+
+@slot()
+  <div class="container mt-4">
+    <h2 class="mb-4">ผลการค้นหา: "{{ query }}"</h2>
+
+    @if(results.length > 0)
+      <ul class="list-group">
+        <!-- Sennheiser -->
+        @if(results.filter(r => r.category === 'Sennheiser').length > 0)
+          <li class="list-group-item bg-primary text-white"><strong>Sennheiser</strong></li>
+          @each(product in results.filter(r => r.category === 'Sennheiser'))
+            <li class="list-group-item">
+              <a href="{{ product.url }}">{{ product.name }}</a>
+            </li>
+          @endeach
+        @endif
+
+        <!-- Hifiman -->
+        @if(results.filter(r => r.category === 'Hifiman').length > 0)
+          <li class="list-group-item bg-primary text-white mt-3"><strong>Hifiman</strong></li>
+          @each(product in results.filter(r => r.category === 'Hifiman'))
+            <li class="list-group-item">
+              <a href="{{ product.url }}">{{ product.name }}</a>
+            </li>
+          @endeach
+        @endif
+
+        <!-- Meze Audio -->
+        @if(results.filter(r => r.category === 'Meze Audio').length > 0)
+          <li class="list-group-item bg-primary text-white mt-3"><strong>Meze Audio</strong></li>
+          @each(product in results.filter(r => r.category === 'Meze Audio'))
+            <li class="list-group-item">
+              <a href="{{ product.url }}">{{ product.name }}</a>
+            </li>
+          @endeach
+        @endif
+      </ul>
+    @else
+      <p>ไม่พบผลลัพธ์</p>
+    @endif
+  </div>
+@end
+
+@endcomponent

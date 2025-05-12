@@ -8,13 +8,3 @@ body {
   height: 100%;
   width: 100%;
 }
-.spec-title {
-  background-color: #007BFF; /* ฟ้าเข้ม */
-  color: white;
-  padding: 12px 20px;
-  border-radius: 6px;
-  font-size: 20px;
-  margin-top: 30px;
-  margin-bottom: 15px;
-}
-

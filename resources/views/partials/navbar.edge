@@ -1,36 +1,63 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand text-white" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link text-white" aria-current="page" href="/pages/home">Home</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link text-white" href="#">Link</a>
         </li>
+
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Headphones
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
+
+            <!-- Sennheiser -->
+            <li><h6 class="dropdown-header bg-primary text-white">Sennheiser</h6></li>
+            <li><a class="dropdown-item" href="/pages/600">HD 600</a></li>
+            <li><a class="dropdown-item" href="/pages/660s2">HD 660S2</a></li>
+            <li><a class="dropdown-item" href="/pages/800">HD 800</a></li>
+
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+
+            <!-- Hifiman -->
+            <li><h6 class="dropdown-header bg-primary text-white">Hifiman</h6></li>
+            <li><a class="dropdown-item" href="/pages/sundara">Sundara</a></li>
+            <li><a class="dropdown-item" href="/pages/editionxs">Edition XS</a></li>
+            <li><a class="dropdown-item" href="/pages/arya">Arya</a></li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <!-- Meze Audio -->
+            <li><h6 class="dropdown-header bg-primary text-white">Meze Audio</h6></li>
+            <li><a class="dropdown-item" href="/pages/meze99">99 Classics</a></li>
+            <li><a class="dropdown-item" href="/pages/meze109">109 PRO</a></li>
+            <li><a class="dropdown-item" href="/pages/liric">LIRIC</a></li>
+
           </ul>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          <a class="nav-link disabled text-white-50" aria-disabled="true">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <form class="d-flex" role="search" action="/pages" method="post">
+          {{ csrfField() }}
+        <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
+      
     </div>
   </div>
 </nav>
