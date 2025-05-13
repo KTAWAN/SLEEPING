@@ -1,0 +1,27 @@
+@layouts.master()
+
+    @slot('style')
+        .ui.container {
+            margin-top: 100px ;
+            width: 30% ;
+        }
+    @end
+
+    @!slot('navbar')
+
+    <h1 class="ui header aligned center">Login</h1>
+    <form class="ui form" action="/login" method="post">
+        {{ csrfField() }}
+        <div class="field">
+            <label>Username</label>
+            <input name="username">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" name="password">
+        </div>
+        <input class="ui button" type="submit" value="Login">
+        <a href="/register">register</a>
+    </form>
+
+@end 

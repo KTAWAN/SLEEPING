@@ -1,0 +1,71 @@
+@layouts.master()
+  @slot('style')
+    .ui.container {
+      margin-top: 100px ;
+      width: 30% ;
+    }
+  @end
+
+  @!slot('navbar')
+  <h1 class="ui header aligned center">Register</h1>
+  <form class="ui form" action="/register" method="post">
+    {{ csrfField() }}
+    <div class="field">
+      <div id="username-error" class="ui negative message" style="display: none;"></div>
+      <label>Username</label>
+      @flashMessage('username')
+        <input name="username" value="{{ old('username') }}">
+      @else
+        <input name="username">
+      @end
+      @inputError('username')
+        @each(message in $messages)
+          <div class="ui negative message">{{message}}</div>
+        @end
+      @end
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" name="password">
+      @inputError('password')
+        @each(message in $messages)
+          <div class="ui negative message">{{message}}</div>
+        @end
+      @end
+    </div>
+    <div class="field">
+      <label>Confirm Password</label>
+      <input type="password" name="password_confirmation">
+    </div>
+    <input class="ui button" type="submit" value="Register">
+    <a href="/">back to signin</a>
+  </form>
+
+  @slot('script')
+    <script>
+      $('input[name="username"]').on('change', function() {
+        const username = $(this).val().trim();
+        if (!username) {
+          $('#username-error').hide();
+          return;
+        }
+
+        $.ajax({
+          url: '/users/verify',
+          method: 'GET',
+          data: { username },
+          statusCode: {
+            203: function(message) {
+              $('#username-error')
+                .text(message)
+                .show();
+            }
+          },
+          success: function() {
+            $('#username-error').hide();
+          }
+        });
+      });
+    </script>
+  @end
+@end
