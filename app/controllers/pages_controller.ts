@@ -1,5 +1,6 @@
  import type { HttpContext } from '@adonisjs/core/http'
  import Cards from '#models/cards'
+ import Post from '#models/post'
  
 
 export default class PagesController {
@@ -52,9 +53,22 @@ export default class PagesController {
 
   public async show({ params, view }: HttpContext) {
     const name = params.name
-    return view.render(`pages/${name}`, { name })
-  }
+    const card = await Cards.query()
+      .where('name', params.name)
+      .firstOrFail()
 
+    const posts = await Post.query()
+      .where('card_id', card.id)
+      .preload('cards')                   
+      .orderBy('created_at', 'desc')
+
+    return view.render(`pages/${name}`, {
+      name: name,
+      posts,                             // now each post has a `.user`
+    })
+    }
+
+  
   async search({ request, view,response }: HttpContext) {
     const id = request.input('search')
     const name = await Cards.query()
@@ -63,8 +77,7 @@ export default class PagesController {
 
 
     if (!name) {
-    // 👉 ถ้าไม่เจอให้ redirect ไปหน้า home หรือ 404 page
-    return response.redirect('/pages/home')
+        return response.redirect('/pages/home')
   }
 
         return view.render(`pages/${name?.name}`, { name })

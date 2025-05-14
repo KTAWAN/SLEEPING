@@ -1,0 +1,79 @@
+>
+  <div class="ui container" style="margin-top: 2em">
+    <!-- NAVIGATION -->
+    <div class="ui secondary pointing menu">
+      <a class="item" href="{{ route('home.page') }}">Home</a>
+      <div class="right menu">
+        <a class="item" href="{{ route('logout') }}">Logout</a>
+      </div>
+    </div>
+
+    <!-- PAGE HEADER & CONTENT -->
+    <div class="ui segment">
+      <h1 class="ui header">
+        {{ name | replace('_', ' ') | capitalize }}
+      </h1>
+
+      {{-- pull in your page-specific HTML via a partial --}}
+      @include(`pages/partials/${name}`)
+    </div>
+
+    <!-- COMMENTS SECTION -->
+    <div class="ui comments" style="margin-top: 3em">
+      <h3 class="ui dividing header">Comments</h3>
+
+      @if(posts && posts.length)
+        @each(post in posts)
+          <div class="comment">
+            <a class="avatar">
+              <img
+                src="{{ post.user.avatarUrl || '/images/default-avatar.png' }}"
+                alt="avatar"
+              >
+            </a>
+            <div class="content">
+              <a class="author">{{ post.user.username }}</a>
+              <div class="metadata">
+                <span class="date">
+                  {{ post.createdAt.toFormat('yyyy-LL-dd HH:mm') }}
+                </span>
+              </div>
+              <div class="text">
+                {{ post.post }}
+              </div>
+            </div>
+          </div>
+        @endeach
+      @else
+        <div class="ui message">
+          No comments yet. Be the first to comment!
+        </div>
+      @endif
+
+      <!-- ADD NEW COMMENT -->
+      <form
+        class="ui reply form"
+        action="{{ route('posts.store', { name }) }}"
+        method="POST"
+      >
+        {{ csrfField() }}
+        <div class="field">
+          <textarea
+            name="post[post]"
+            placeholder="Add a comment..."
+            required
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          class="ui primary labeled icon button"
+        >
+          <i class="icon edit"></i>
+          Add Comment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  
+
