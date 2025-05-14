@@ -1,14 +1,11 @@
 <div class="ui comments" style="margin-top: 3em">
-    <h3 class="ui dividing header">Comments</h3>
+    <h1 class="ui dividing header">Comments</h1>
 
     @if(posts && posts.length)
       @each(post in posts)
         <div class="comment">
           <a class="avatar">
-            <img
-              src="{{ post.user.avatarUrl || '/images/default-avatar.png' }}"
-              alt="avatar"
-            >
+            
           </a>
           <div class="content">
             <a class="author">{{ post.user.username }}</a>
