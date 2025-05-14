@@ -1,79 +1,76 @@
->
-  <div class="ui container" style="margin-top: 2em">
-    <!-- NAVIGATION -->
-    <div class="ui secondary pointing menu">
-      <a class="item" href="{{ route('home.page') }}">Home</a>
-      <div class="right menu">
-        <a class="item" href="{{ route('logout') }}">Logout</a>
-      </div>
-    </div>
+<div class="ui comments" style="margin-top: 3em">
+    <h3 class="ui dividing header">Comments</h3>
 
-    <!-- PAGE HEADER & CONTENT -->
-    <div class="ui segment">
-      <h1 class="ui header">
-        {{ name | replace('_', ' ') | capitalize }}
-      </h1>
-
-      {{-- pull in your page-specific HTML via a partial --}}
-      @include(`pages/partials/${name}`)
-    </div>
-
-    <!-- COMMENTS SECTION -->
-    <div class="ui comments" style="margin-top: 3em">
-      <h3 class="ui dividing header">Comments</h3>
-
-      @if(posts && posts.length)
-        @each(post in posts)
-          <div class="comment">
-            <a class="avatar">
-              <img
-                src="{{ post.user.avatarUrl || '/images/default-avatar.png' }}"
-                alt="avatar"
-              >
-            </a>
-            <div class="content">
-              <a class="author">{{ post.user.username }}</a>
-              <div class="metadata">
-                <span class="date">
-                  {{ post.createdAt.toFormat('yyyy-LL-dd HH:mm') }}
-                </span>
-              </div>
-              <div class="text">
-                {{ post.post }}
-              </div>
+    @if(posts && posts.length)
+      @each(post in posts)
+        <div class="comment">
+          <a class="avatar">
+            <img
+              src="{{ post.user.avatarUrl || '/images/default-avatar.png' }}"
+              alt="avatar"
+            >
+          </a>
+          <div class="content">
+            <a class="author">{{ post.user.username }}</a>
+            <div class="metadata">
+              <span class="date">{{ post.createdAt.toFormat('yyyy-LL-dd HH:mm') }}</span>
             </div>
+            <div class="text">
+  {{ JSON.parse(post.comment).post }}
+</div>
+
+
+
+            @if(post.userId === auth.user.id)
+              <div class="actions" style="margin-top: 0.5em">
+                <button
+                  class="ui tiny button toggle-edit"
+                  data-id="{{ post.id }}"
+                >Edit</button>
+
+                <a
+                  href="{{ route('posts.destroy', { name, id: post.id }) }}"
+                  class="ui tiny red button"
+                  onclick="return confirm('Are you sure you want to delete this comment?')"
+                >
+                  Delete
+                </a>
+              </div>
+
+              <form
+                class="ui reply form edit-form"
+                id="edit-form-{{ post.id }}"
+                action="{{ route('posts.update', { name, id: post.id }) }}"
+                method="POST"
+                style="display: none; margin-top: 1em"
+              >
+                {{ csrfField() }}
+                <div class="field">
+                  <textarea name="post[post]" required>{{ post.comment }}</textarea>
+                </div>
+                <button type="submit" class="ui tiny primary button">Save</button>
+              </form>
+            @endif
           </div>
-        @endeach
-      @else
-        <div class="ui message">
-          No comments yet. Be the first to comment!
         </div>
-      @endif
+      @endeach
+    @else
+      <div class="ui message">No comments yet. Be the first to comment!</div>
+    @endif
 
-      <!-- ADD NEW COMMENT -->
-      <form
-        class="ui reply form"
-        action="{{ route('posts.store', { name }) }}"
-        method="POST"
-      >
-        {{ csrfField() }}
-        <div class="field">
-          <textarea
-            name="post[post]"
-            placeholder="Add a comment..."
-            required
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          class="ui primary labeled icon button"
-        >
-          <i class="icon edit"></i>
-          Add Comment
-        </button>
-      </form>
-    </div>
+    <!-- ADD NEW COMMENT -->
+    <form
+      class="ui reply form"
+      action="{{ route('posts.store', { name }) }}"
+      method="POST"
+    >
+      {{ csrfField() }}
+      <div class="field">
+        <textarea name="post[post]" placeholder="Add a comment..." required></textarea>
+      </div>
+      <button type="submit" class="ui primary labeled icon button">
+        <i class="icon edit"></i>
+        Post
+      </button>
+    </form>
   </div>
-
-  
-

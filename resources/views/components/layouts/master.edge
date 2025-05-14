@@ -135,7 +135,21 @@
     });
   });
 </script>
-
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.toggle-edit').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id')
+        const form = document.getElementById(`edit-form-${id}`)
+        if (form.style.display === 'none') {
+          form.style.display = 'block'
+        } else {
+          form.style.display = 'none'
+        }
+      })
+    })
+  })
+</script>
 
   </body>
 </html>

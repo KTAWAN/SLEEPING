@@ -1,32 +1,31 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
-import Cards from './cards.js'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
-
+import Card from './cards.js'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
-    
-   @column()
-  declare user_id: number
 
   @column()
-  declare card_id: number
+  declare userId: number
 
   @column()
-  declare post: string
+  declare cardId: number
 
-  @hasMany(() => Cards)
-  declare cards: HasMany<typeof Cards>
+  @column()
+  declare comment: string
 
-  @hasMany(() => User)
-  declare users: HasMany<typeof User>
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
 
-  @column.dateTime({ autoCreate: true, serializeAs: null })
+  @belongsTo(() => Card)
+  declare card: BelongsTo<typeof Card>
+
+  @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
