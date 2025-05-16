@@ -1,67 +1,93 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand text-white" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand text-white" href="#">The Headphone Lab</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
+      <!-- left side links -->
+      <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link text-white" aria-current="page" href="/pages/home">Home</a>
         </li>
-
         <li class="nav-item">
-          <a class="nav-link text-white" href="#">Link</a>
+          
         </li>
-
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a
+            class="nav-link dropdown-toggle text-white"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             Headphones
           </a>
           <ul class="dropdown-menu">
-
-            <!-- Sennheiser -->
             <li><h6 class="dropdown-header bg-primary text-white">Sennheiser</h6></li>
             <li><a class="dropdown-item" href="/pages/600">HD 600</a></li>
             <li><a class="dropdown-item" href="/pages/660s2">HD 660S2</a></li>
             <li><a class="dropdown-item" href="/pages/800">HD 800</a></li>
-
             <li><hr class="dropdown-divider"></li>
-
-            <!-- Hifiman -->
             <li><h6 class="dropdown-header bg-primary text-white">Hifiman</h6></li>
             <li><a class="dropdown-item" href="/pages/sundara">Sundara</a></li>
             <li><a class="dropdown-item" href="/pages/editionxs">Edition XS</a></li>
             <li><a class="dropdown-item" href="/pages/arya">Arya</a></li>
-
             <li><hr class="dropdown-divider"></li>
-
-            <!-- Meze Audio -->
             <li><h6 class="dropdown-header bg-primary text-white">Meze Audio</h6></li>
             <li><a class="dropdown-item" href="/pages/meze99">99 Classics</a></li>
             <li><a class="dropdown-item" href="/pages/meze109">109 PRO</a></li>
             <li><a class="dropdown-item" href="/pages/liric">LIRIC</a></li>
-
           </ul>
         </li>
-
         <li class="nav-item">
-          <a class="nav-link disabled text-white-50" aria-disabled="true">Disabled</a>
+          
         </li>
       </ul>
-        <form class="d-flex" role="search" action="/pages" method="post">
-          {{ csrfField() }}
-        <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
+
+      <!-- centered search -->
+      <form
+        class="d-flex mx-auto"
+        role="search"
+        action="/pages"
+        method="post"
+        style="max-width: 500px; width: 100%;"
+      >
+        {{ csrfField() }}
+        <input
+          name="search"
+          class="form-control me-2"
+          type="search"
+          placeholder="Search headphones..."
+          aria-label="Search"
+          style="flex: 1;"
+        />
+        <button class="btn btn-success" type="submit">
+          <i class="bi bi-search"></i> Search
+        </button>
       </form>
 
-      <form class="d-flex" role="search" action="/logout" method="get">
-         <button class="btn btn-outline-success" type="submit">sign out</button>
+      <!-- sign-out button on the right -->
+      <form class="d-flex" action="/logout" method="get">
+        <button class="btn btn-danger ms-2" type="submit">
+          <i class="bi bi-box-arrow-right"></i> Sign Out
+        </button>
       </form>
-      
     </div>
   </div>
 </nav>
+
+<!-- Make sure you include Bootstrap Icons if you want the <i class="bi ..."> icons: -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>

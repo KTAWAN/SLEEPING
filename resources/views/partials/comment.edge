@@ -1,73 +1,121 @@
-<div class="ui comments" style="margin-top: 3em">
-    <h1 class="ui dividing header">Comments</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comments</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+  />
+  <style>
+    body, html { margin:0; padding:0; height:100%; background:#f9f9f9; }
+    .container { max-width:800px; margin:2em auto; padding:1em; }
+    .ui.segment.comment-card {
+      padding:2em; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      border-radius:8px; background:#fff;
+    }
+    .comment .avatar i.icon { font-size:2.5em; color:#bbb; }
+    .comment .actions button,
+    .comment .actions a { margin-right:.5em; }
+    form.edit-form { margin-top:1em; }
+    form.edit-form textarea,
+    .ui.reply.form textarea { min-height:4em; }
+    .new-comment { margin-top:2em; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="ui comments comment-card">
+      <h1 class="ui dividing header">Comments</h1>
 
-    @if(posts && posts.length)
-      @each(post in posts)
-        <div class="comment">
-          <a class="avatar">
-            
-          </a>
-          <div class="content">
-            <a class="author">{{ post.user.username }}</a>
-            <div class="metadata">
-              <span class="date">{{ post.createdAt.toFormat('yyyy-LL-dd HH:mm') }}</span>
-            </div>
-            <div class="text">
-  {{ JSON.parse(post.comment).post }}
-</div>
-
-
-
-            @if(post.userId === auth.user.id)
-              <div class="actions" style="margin-top: 0.5em">
-                <button
-                  class="ui tiny button toggle-edit"
-                  data-id="{{ post.id }}"
-                >Edit</button>
-
-                <a
-                  href="{{ route('posts.destroy', { name, id: post.id }) }}"
-                  class="ui tiny red button"
-                  onclick="return confirm('Are you sure you want to delete this comment?')"
-                >
-                  Delete
-                </a>
+      @if(posts && posts.length)
+        @each(post in posts)
+          <div class="comment">
+            <a class="avatar">
+              <i class="user circle icon"></i>
+            </a>
+            <div class="content">
+              <a class="author">{{ post.user.username }}</a>
+              <div class="metadata">
+                <span class="date">{{ post.createdAt.toFormat('yyyy-LL-dd HH:mm') }}</span>
+              </div>
+              <div class="text">
+                {{ JSON.parse(post.comment).post }}
               </div>
 
-              <form
-                class="ui reply form edit-form"
-                id="edit-form-{{ post.id }}"
-                action="{{ route('posts.update', { name, id: post.id }) }}"
-                method="POST"
-                style="display: none; margin-top: 1em"
-              >
-                {{ csrfField() }}
-                <div class="field">
-                  <textarea name="post[post]" required>{{ post.comment }}</textarea>
-                </div>
-                <button type="submit" class="ui tiny primary button">Save</button>
-              </form>
-            @endif
-          </div>
-        </div>
-      @endeach
-    @else
-      <div class="ui message">No comments yet. Be the first to comment!</div>
-    @endif
+              <div class="actions">
+                {{-- only owner can edit --}}
+                @if(post.userId === auth.user.id)
+                  <button
+                    class="ui tiny button toggle-edit"
+                    data-id="{{ post.id }}"
+                  >Edit</button>
+                @endif
 
-    <!-- ADD NEW COMMENT -->
-    <form
-      class="ui reply form"
-      action="{{ route('posts.store', { name }) }}"
-      method="POST"
-    >
-      {{ csrfField() }}
-      <div class="field">
-        <textarea name="post[post]" placeholder="Add a comment..." required></textarea>
-      </div>
-      <button type="submit" class="ui primary labeled icon button">
-        <i class="icon edit"></i>
-        Post
-      </button>
-    </form>
+                
+                @if(post.userId === auth.user.id || auth.user.role === 'ADMIN')
+                  <a
+                    href="{{ route('posts.destroy', { name, id: post.id }) }}"
+                    class="ui tiny red button"
+                    onclick="return confirm('Are you sure you want to delete this comment?')"
+                  >Delete</a>
+                @endif
+              </div>
+
+              {{-- inline edit form (owners only) --}}
+              @if(post.userId === auth.user.id)
+                <form
+                  class="ui reply form edit-form"
+                  id="edit-form-{{ post.id }}"
+                  action="{{ route('posts.update', { name, id: post.id }) }}"
+                  method="POST"
+                  style="display:none;"
+                >
+                  {{ csrfField() }}
+                  <div class="field">
+                    <textarea name="post[post]" required>{{ JSON.parse(post.comment).post }}</textarea>
+                  </div>
+                  <button type="submit" class="ui tiny primary button">Save</button>
+                </form>
+              @endif
+            </div>
+          </div>
+        @endeach
+      @else
+        <div class="ui message">No comments yet. Be the first to comment!</div>
+      @endif
+
+      <!-- Add New Comment -->
+      <form
+        class="ui reply form new-comment"
+        action="{{ route('posts.store', { name }) }}"
+        method="POST"
+      >
+        {{ csrfField() }}
+        <div class="field">
+          <textarea
+            name="post[post]"
+            placeholder="Add a comment..."
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="ui primary labeled icon button">
+          <i class="edit icon"></i>
+          Post
+        </button>
+      </form>
+    </div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function() {
+      $('.toggle-edit').click(function() {
+        const id = $(this).data('id')
+        $('#edit-form-' + id).toggle()
+      })
+    })
+  </script>
+</body>
+</html>

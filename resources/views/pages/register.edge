@@ -1,71 +1,127 @@
-@layouts.master()
-  @slot('style')
-    .ui.container {
-      margin-top: 100px ;
-      width: 30% ;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+  >
+  <style>
+    body, html {
+  height: 100%;
+  margin: 0;
+  /* full-screen background from public/loginvdo.jpg */
+  background: url('/loginvdo.jpg') center center / cover no-repeat fixed;
+}
+    .auth-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
-  @end
+    .auth-box {
+      background: #fff;
+      padding: 2em;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      width: 360px;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 1.5em;
+    }
+    .field .ui.negative.message {
+      margin-top: 0.5em;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1em;
+      color: #4183c4;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-box">
+      <h1 class="ui header auth-header">Register</h1>
 
-  @!slot('navbar')
-  <h1 class="ui header aligned center">Register</h1>
-  <form class="ui form" action="/register" method="post">
-    {{ csrfField() }}
-    <div class="field">
-      <div id="username-error" class="ui negative message" style="display: none;"></div>
-      <label>Username</label>
-      @flashMessage('username')
-        <input name="username" value="{{ old('username') }}">
-      @else
-        <input name="username">
-      @end
-      @inputError('username')
-        @each(message in $messages)
-          <div class="ui negative message">{{message}}</div>
-        @end
-      @end
-    </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" name="password">
-      @inputError('password')
-        @each(message in $messages)
-          <div class="ui negative message">{{message}}</div>
-        @end
-      @end
-    </div>
-    <div class="field">
-      <label>Confirm Password</label>
-      <input type="password" name="password_confirmation">
-    </div>
-    <input class="ui button" type="submit" value="Register">
-    <a href="/">back to signin</a>
-  </form>
+      <form class="ui form" action="/register" method="post">
+        {{ csrfField() }}
 
-  @slot('script')
-    <script>
-      $('input[name="username"]').on('change', function() {
-        const username = $(this).val().trim();
-        if (!username) {
-          $('#username-error').hide();
-          return;
-        }
+        <div class="field">
+          <div id="username-error" class="ui negative message" style="display: none;"></div>
+          <label>Username</label>
+          <div class="ui left icon input">
+            @flashMessage('username')
+              <input name="username" value="{{ old('username') }}" placeholder="Username" required>
+            @else
+              <input name="username" placeholder="Username" required>
+            @end
+            <i class="user icon"></i>
+          </div>
+          @inputError('username')
+            @each(message in $messages)
+              <div class="ui negative message">{{message}}</div>
+            @end
+          @end
+        </div>
 
-        $.ajax({
-          url: '/users/verify',
-          method: 'GET',
-          data: { username },
-          statusCode: {
-            203: function(message) {
-              $('#username-error')
-                .text(message)
-                .show();
-            }
-          },
-          success: function() {
+        <div class="field">
+          <label>Password</label>
+          <div class="ui left icon input">
+            <input type="password" name="password" placeholder="Password" required>
+            <i class="lock icon"></i>
+          </div>
+          @inputError('password')
+            @each(message in $messages)
+              <div class="ui negative message">{{message}}</div>
+            @end
+          @end
+        </div>
+
+        <div class="field">
+          <label>Confirm Password</label>
+          <div class="ui left icon input">
+            <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+            <i class="lock icon"></i>
+          </div>
+        </div>
+
+        <button class="ui fluid large primary button" type="submit">Register</button>
+      </form>
+
+      <a href="/" class="back-link">Back to Sign In</a>
+
+      <script>
+        $('input[name="username"]').on('change', function() {
+          const username = $(this).val().trim();
+          if (!username) {
             $('#username-error').hide();
+            return;
           }
+
+          $.ajax({
+            url: '/users/verify',
+            method: 'GET',
+            data: { username },
+            statusCode: {
+              203: function(message) {
+                $('#username-error')
+                  .text(message)
+                  .show();
+              }
+            },
+            success: function() {
+              $('#username-error').hide();
+            }
+          });
         });
-      });
-    </script>
-  @end
-@end
+      </script>
+    </div>
+  </div>
+</body>
+</html>
